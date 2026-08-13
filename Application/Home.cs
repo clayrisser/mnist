@@ -64,11 +64,19 @@ namespace mkLink {
 
             // MKLINK [[/D] | [/H] | [/J]] Link Target
             string option = LinkTypeOption();
-            string command = "MKLINK "
-                + (option.Length > 0 ? option + " " : "")
-                + Quote(this.linkTextBox.Text) + " " + Quote(this.targetTextBox.Text);
+            string verbatim = "MKLINK" + (option.Length > 0 ? " " + option : "");
 
-            CommandResult result = CMD.Execute(command);
+            CommandResult result;
+            try {
+                result = CMD.Execute(verbatim, this.linkTextBox.Text, this.targetTextBox.Text);
+            } catch (ArgumentException ex) {
+                // DescribeProblem already refuses everything CommandLine
+                // refuses, so reaching this means the two disagree.
+                MessageBox.Show(this, ex.Message, "mkLink",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (result.Succeeded) {
                 MessageBox.Show(this, result.Message, "mkLink",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -130,6 +138,13 @@ namespace mkLink {
             if (target.Length == 0) {
                 return "Choose the file or folder to point at.";
             }
+            // Ahead of FullPathOrNull, which only rejects these characters
+            // while the project targets a framework old enough to still run
+            // the legacy path checks.
+            string unquotable = CommandLine.DescribeUnquotable(target);
+            if (unquotable != null) {
+                return unquotable;
+            }
             if (target.FullPathOrNull() == null) {
                 return "The target is not a valid path.";
             }
@@ -140,6 +155,10 @@ namespace mkLink {
             string link = this.linkTextBox.Text;
             if (link.Length == 0) {
                 return "Choose where the link should be created.";
+            }
+            unquotable = CommandLine.DescribeUnquotable(link);
+            if (unquotable != null) {
+                return unquotable;
             }
             string fullLink = link.FullPathOrNull();
             if (fullLink == null) {
@@ -229,11 +248,6 @@ namespace mkLink {
                 MessageBox.Show(null, "Could not open " + url + Environment.NewLine + e.Message,
                     "mkLink", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-        }
-
-
-        private static string Quote(string value) {
-            return "\"" + value + "\"";
         }
     }
 }

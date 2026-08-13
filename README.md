@@ -42,6 +42,22 @@ The executable lands in `Application\bin\Release\mkLink.exe` and can be run
 directly.
 
 
+## Tests
+<!------------------------------------------------------->
+
+`tests\mkLink.Tests` covers `CommandLine`, which is what keeps text-box input
+from turning into `cmd.exe` syntax. That file has no dependency beyond `System`
+and is compiled straight into the test project, so the tests run anywhere the
+.NET SDK does, not only on Windows:
+
+```
+dotnet test tests/mkLink.Tests
+```
+
+The project is deliberately left out of `mkLink.sln`, which is a .NET Framework
+solution and cannot load an SDK-style project.
+
+
 ## Usage
 <!------------------------------------------------------->
 
@@ -103,6 +119,7 @@ A ridiculous amount of coffee was consumed in the process of building this proje
 <!------------------------------------------------------->
 
 Unreleased
+* Text-box input can no longer add its own commands to the MKLINK line
 * Hard Link and Directory Junction are separate choices instead of one entry that guessed from the target
 * Errors from MKLINK are shown instead of being discarded with standard error
 * Bad input is explained at the bottom of the window instead of silently disabling Create Link

@@ -43,8 +43,25 @@ namespace mkLink {
 
     class CMD {
 
-        public static CommandResult Execute(string command) {
-            ProcessStartInfo startInfo = new ProcessStartInfo("cmd.exe", "/c " + command);
+        /// <summary>
+        /// Runs <paramref name="verbatimCommand"/> through cmd.exe with each of
+        /// <paramref name="arguments"/> appended as a quoted token.
+        ///
+        /// The split is the point: the command keeps its syntax in the first
+        /// parameter, where only this program's own literals go, and every
+        /// value a user can influence arrives separately and gets quoted by
+        /// <see cref="CommandLine"/>. There is no overload that takes a
+        /// pre-assembled command line, so a caller cannot concatenate its way
+        /// past the quoting.
+        ///
+        /// /v:off pins delayed expansion off, so a !NAME! in a path stays a
+        /// !NAME! even when the machine has turned expansion on by default in
+        /// HKCU\Software\Microsoft\Command Processor.
+        /// </summary>
+        public static CommandResult Execute(string verbatimCommand, params string[] arguments) {
+            string command = CommandLine.Build(verbatimCommand, arguments);
+
+            ProcessStartInfo startInfo = new ProcessStartInfo("cmd.exe", "/v:off /c " + command);
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
             startInfo.RedirectStandardError = true;
