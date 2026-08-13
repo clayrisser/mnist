@@ -42,6 +42,7 @@
             this.linkGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.statusLabel = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -128,7 +129,7 @@
             this.typeDescriptionLabel.Name = "typeDescriptionLabel";
             this.typeDescriptionLabel.Size = new System.Drawing.Size(241, 13);
             this.typeDescriptionLabel.TabIndex = 12;
-            this.typeDescriptionLabel.Text = "Creates a symbolic link, also known as a shortcut.";
+            this.typeDescriptionLabel.Text = "Points at the target by path. Works for files and folders.";
             // 
             // aboutLinkLabel
             // 
@@ -222,13 +223,14 @@
             this.typeComboBox.FormattingEnabled = true;
             this.typeComboBox.Items.AddRange(new object[] {
             "Symbolic Link",
-            "Hard Link / Directory Junction"});
+            "Hard Link",
+            "Directory Junction"});
             this.typeComboBox.Location = new System.Drawing.Point(10, 23);
             this.typeComboBox.Margin = new System.Windows.Forms.Padding(0, 0, 5, 10);
             this.typeComboBox.Name = "typeComboBox";
             this.typeComboBox.Size = new System.Drawing.Size(175, 21);
             this.typeComboBox.TabIndex = 15;
-            this.typeComboBox.SelectedIndexChanged += new System.EventHandler(this.typeComboBox_SelectedIndexChanged_1);
+            this.typeComboBox.SelectedIndexChanged += new System.EventHandler(this.typeComboBox_SelectedIndexChanged);
             // 
             // targetGroupBox
             // 
@@ -279,6 +281,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.statusLabel);
             this.panel2.Controls.Add(this.cancelButton);
             this.panel2.Controls.Add(this.createLinkButton);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -287,6 +290,18 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(574, 41);
             this.panel2.TabIndex = 14;
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.statusLabel.AutoEllipsis = true;
+            this.statusLabel.ForeColor = System.Drawing.Color.Firebrick;
+            this.statusLabel.Location = new System.Drawing.Point(5, 14);
+            this.statusLabel.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(379, 16);
+            this.statusLabel.TabIndex = 12;
             // 
             // cancelButton
             // 
@@ -344,6 +359,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.GroupBox targetGroupBox;
         private System.Windows.Forms.GroupBox linkGroupBox;
